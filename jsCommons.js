@@ -76,8 +76,9 @@ function circle(ctx, x, y, radius, custom){
 		ctx.fillStyle = custom.fillColor
 		ctx.strokeStyle = custom.strokeColor
 		ctx.lineWidth = custom.strokeWidth
-			
-		ctx.arc(x, y, radius, 0, Math.PI*2, true); 
+		
+	//draw the circle [ORIGIN IS CENTRE]
+		ctx.arc(x-radius, y-radius, radius, 0, Math.PI*2, true); 
 	ctx.closePath()	
 
 	
@@ -91,7 +92,6 @@ function circle(ctx, x, y, radius, custom){
 	else{
 		ctx.fill()
 	}
-	
 }
 
 function line(ctx, x, y, x2, y2, custom){
@@ -109,8 +109,6 @@ function line(ctx, x, y, x2, y2, custom){
 	ctx.lineTo(x2, x2);
 	ctx.stroke();
 	ctx.closePath();
-
-	
 }
 
 
