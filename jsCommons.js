@@ -116,7 +116,6 @@ function line(ctx, x, y, x2, y2, custom){
 
 
 
-//testing
 
 /*Array Functions*/
 function getJSONLength(json){
