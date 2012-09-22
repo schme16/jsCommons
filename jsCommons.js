@@ -63,11 +63,19 @@ Math.pointInPoly = function (poly, pt){
 /*Drawing Functions*/
 function circle(ctx, x, y, radius, custom){
 	//draws a circle || Example Usage: circle(100, 100, 15, 'both', {stroke:'#000000', fill:'#AAAAAA'})
+	if(!custom){
+		custom = {
+			fillType: 'fill',
+			fillColor:  '#ffffff',
+			strokeColor: '#000000',
+			strokeWidth: 1.01,
+		}
+	}
 	ctx.beginPath();
-		var fillType = custom.fillType || 'fill'
-		ctx.fillStyle = custom.fillColor || '#ffffff'
-		ctx.strokeStyle = custom.strokeColor || 'black'
-		ctx.lineWidth = custom.lineWidth || 1.01
+		var fillType = custom.fillType
+		ctx.fillStyle = custom.fillColor
+		ctx.strokeStyle = custom.strokeColor
+		ctx.lineWidth = custom.strokeWidth
 			
 		ctx.arc(x, y, radius, 0, Math.PI*2, true); 
 	ctx.closePath()	
@@ -86,11 +94,17 @@ function circle(ctx, x, y, radius, custom){
 	
 }
 
-function line(ctx, x, y, x2, y2, width, color){
+function line(ctx, x, y, x2, y2, custom){
 	//draw a line
+	if(!custom){
+		custom = {
+			strokeColor: '#000000',
+			strokeWidth: 1.01,
+		}
+	}
 	ctx.beginPath();
-	ctx.lineWidth = width || 1.01
-	ctx.strokeStyle = color || '#000000'
+	ctx.lineWidth = custom.strokeWidth
+	ctx.strokeStyle = custom.strokeColor
 	ctx.moveTo(x, y);
 	ctx.lineTo(x2, x2);
 	ctx.stroke();
