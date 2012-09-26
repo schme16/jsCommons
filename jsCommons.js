@@ -67,20 +67,21 @@ Math.getPixel = function (n,tileSize){ return (Math.ceil(n)*tileSize) }
 /*Drawing Functions*/
 draw = {}
 draw.circle = function (ctx, x, y, radius, custom){
-	//draws a circle || Example Usage: circle(100, 100, 15, 'both', {stroke:'#000000', fill:'#AAAAAA'})
-	if(!custom){
-		custom = {
+	//draws a circle || Example Usage: 
+	var defaults = {
 			fillType: 'fill',
 			fillColor:  '#ffffff',
 			strokeColor: '#000000',
 			strokeWidth: 1.01,
 		}
+	if(!custom){
+			custom = defaults
 	}
 	ctx.beginPath();
-		var fillType = custom.fillType
-		ctx.fillStyle = custom.fillColor
-		ctx.strokeStyle = custom.strokeColor
-		ctx.lineWidth = custom.strokeWidth
+		var fillType = custom.fillType || defaults.fillType
+		ctx.fillStyle = custom.fillColor || defaults.fillColor
+		ctx.strokeStyle = custom.strokeColor || defaults.strokeColor
+		ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth
 			
 		ctx.arc(x, y, radius, 0, Math.PI*2, true); 
 	ctx.closePath()	
@@ -101,20 +102,21 @@ draw.circle = function (ctx, x, y, radius, custom){
 
 draw.line = function (ctx, x, y, x2, y2, custom){
 	//draw a line
-	if(!custom){
-		custom = {
-			strokeColor: '#000000',
-			strokeWidth: 1.01,
-		}
+	var defaults = {
+		strokeColor: '#000000',
+		strokeWidth: 1.01,
 	}
-	ctx.lineWidth = custom.strokeWidth || 1.01
-	ctx.strokeStyle = custom.strokeColor || '#000000'
+	if(!custom){
+		custom = defaults
+	}
+	ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth
+	ctx.strokeStyle = custom.strokeColor || defaults.strokeColor
 	
-	ctx.beginPath();
+	//ctx.beginPath();
 	ctx.moveTo(x, y);	
 	ctx.lineTo(x2, y2);
 	ctx.stroke();
-	ctx.closePath();
+	//ctx.closePath();
 
 	
 }
