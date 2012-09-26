@@ -2,7 +2,7 @@
 /*New Math functions*/
 Math.randomTo = function(from,to){
     return Math.floor(Math.random()*(to-from+1)+from);
-}
+} 
 
 Math.deg = function(a){
 	return a * (Math.PI / 180)
@@ -46,6 +46,7 @@ Math.newScale = function (img, max){
 Math.getPercentage = function (a,b){ return (a/val.big)*100 }
 
 Math.pointInPoly = function (poly, pt){
+	//Takes an array, NOT a JSON object
     for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
         ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
         && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
@@ -53,6 +54,9 @@ Math.pointInPoly = function (poly, pt){
     return c;
 }
 
+Math.getTile = function (n, tileSize){ return (Math.ceil((n/tileSize))) }
+
+Math.getPixel = function (n,tileSize){ return (Math.ceil(n)*tileSize) }
 
 
 
@@ -61,7 +65,8 @@ Math.pointInPoly = function (poly, pt){
 
 
 /*Drawing Functions*/
-function circle(ctx, x, y, radius, custom){
+draw = {}
+draw.circle = function (ctx, x, y, radius, custom){
 	//draws a circle || Example Usage: circle(100, 100, 15, 'both', {stroke:'#000000', fill:'#AAAAAA'})
 	if(!custom){
 		custom = {
@@ -76,9 +81,8 @@ function circle(ctx, x, y, radius, custom){
 		ctx.fillStyle = custom.fillColor
 		ctx.strokeStyle = custom.strokeColor
 		ctx.lineWidth = custom.strokeWidth
-		
-	//draw the circle [ORIGIN IS CENTRE]
-		ctx.arc(x-radius, y-radius, radius, 0, Math.PI*2, true); 
+			
+		ctx.arc(x, y, radius, 0, Math.PI*2, true); 
 	ctx.closePath()	
 
 	
@@ -92,9 +96,10 @@ function circle(ctx, x, y, radius, custom){
 	else{
 		ctx.fill()
 	}
+	
 }
 
-function line(ctx, x, y, x2, y2, custom){
+draw.line = function (ctx, x, y, x2, y2, custom){
 	//draw a line
 	if(!custom){
 		custom = {
@@ -102,14 +107,18 @@ function line(ctx, x, y, x2, y2, custom){
 			strokeWidth: 1.01,
 		}
 	}
+	ctx.lineWidth = custom.strokeWidth || 1.01
+	ctx.strokeStyle = custom.strokeColor || '#000000'
+	
 	ctx.beginPath();
-	ctx.lineWidth = custom.strokeWidth
-	ctx.strokeStyle = custom.strokeColor
-	ctx.moveTo(x, y);
-	ctx.lineTo(x2, x2);
+	ctx.moveTo(x, y);	
+	ctx.lineTo(x2, y2);
 	ctx.stroke();
 	ctx.closePath();
+
+	
 }
+
 
 
 
@@ -118,12 +127,41 @@ function line(ctx, x, y, x2, y2, custom){
 
 
 /*Array Functions*/
-function getJSONLength(json){
+array = {}
+array.getJSONLength = function (json){
 	var count = 0
 	for(i in json){
 		count++
 	}
 	return count
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
