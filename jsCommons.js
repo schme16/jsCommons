@@ -27,7 +27,7 @@ Math.diff = function(a,b){	return Math.abs(a - b) }
 
 Math.biggest = function getBiggest(a,b){ if(a>=b){return a} return b }
 
-Math.circleOverlap = function(c1, c2){
+Math.circleOverlap = function(c1, c2){ //Takes an array or json obj with an x, y, radius property
 	var distance = Math.sqrt( Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2) )
 	if(distance < (c1.radius+ c2.radius)){ 
 		return true
@@ -121,7 +121,9 @@ draw.line = function (ctx, x, y, x2, y2, custom){
 	
 }
 
-
+draw.clear = function(ctx){
+	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
 
 
 
