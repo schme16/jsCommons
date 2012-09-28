@@ -145,7 +145,29 @@ array.getJSONLength = function (json){
 
 
 
+/*CSS Functions*/
+css = {}
 
+/*This fetches a given value from a given selector/rule || based almost verbatim on: http://www.dzone.com/snippets/reading-attribute-values.
+ Aesthetic changes were made to fit my style, very little else was altered; all rights and credit go to @DZone*/
+css.getAttr = function(selector, attribute){
+	selector = selector.toLowerCase();
+	var stylesheet = document.styleSheets[0];
+	var n = stylesheet.cssRules.length;
+	for(var i=0; i<n; i++){
+		var selectors = stylesheet.cssRules[i].selectorText.toLowerCase().split(",");
+		var m = selectors.length;
+		for(j=0; j<m; j++){
+			if(selectors[j].trim() == selector){
+				var value = stylesheet.cssRules[i].style.getPropertyValue(attribute);
+				if(value!=""){
+					return value;
+				}
+			}
+		}
+	}
+	return null;
+}
 
 
 
