@@ -1,4 +1,9 @@
 
+
+
+
+
+
 /*New Math functions*/
 Math.randomTo = function(from,to){
     return Math.floor(Math.random()*(to-from+1)+from);
@@ -57,7 +62,6 @@ Math.pointInPoly = function (poly, pt){
 Math.getTile = function (n, tileSize){ return (Math.ceil((n/tileSize))) }
 
 Math.getPixel = function (n,tileSize){ return (Math.ceil(n)*tileSize) }
-
 
 
 
@@ -147,10 +151,9 @@ array.getJSONLength = function (json){
 
 /*CSS Functions*/
 css = {}
-
+css.getAttr = function(selector, attribute){
 /*This fetches a given value from a given selector/rule || based almost verbatim on: http://www.dzone.com/snippets/reading-attribute-values.
  Aesthetic changes were made to fit my style, very little else was altered; all rights and credit go to @DZone*/
-css.getAttr = function(selector, attribute){
 	selector = selector.toLowerCase();
 	var stylesheet = document.styleSheets[0];
 	var n = stylesheet.cssRules.length;
@@ -168,6 +171,31 @@ css.getAttr = function(selector, attribute){
 	}
 	return null;
 }
+
+
+
+
+
+
+/*System Functions*/
+system = {}
+
+system.android = function() { return navigator.userAgent.match(/Android/i) ? true : false; }
+
+system.blackBerry = function() { return navigator.userAgent.match(/BlackBerry/i) ? true : false; }
+
+system.iOS = function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false; }
+
+system.windows = function() { return navigator.userAgent.match(/IEMobile/i) ? true : false; }
+
+system.mobile = function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows()); }
+
+system.clickType = function(){ return system.mobile ? 'touchstart':'click' }
+
+
+
+
+
 
 
 
