@@ -190,12 +190,24 @@ system.windows = function() { return navigator.userAgent.match(/IEMobile/i) ? tr
 
 system.mobile = function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows()); }
 
-system.clickType = function(){ return system.mobile ? 'touchstart':'click' }
+system.clickType = function(){ return system.mobile() ? 'touchstart':'click' }
 
 
 
 
 
+
+
+/*DOM Functions*/
+dom = {}
+
+dom.dataAttr = function(domElement, selector, data){
+	if(data){
+		domElement.setAttribute("data-"+selector, data)
+	}
+	var d = data||domElement.getAttribute("data-"+selector)
+	return d
+}
 
 
 
