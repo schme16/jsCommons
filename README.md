@@ -2,6 +2,7 @@ jsCommons
 =========
 
 Common functions that I've needed over the years for most projects
+<img src="http://creativecommons.org/wp-content/themes/creativecommons.org/images/fc_approved_tiny.png" />
 <br>
 <br>
 <br>
