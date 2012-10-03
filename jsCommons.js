@@ -10,15 +10,19 @@ Math.randomTo = function(from,to){
 } 
 
 Math.deg = function(a){
-	return a * (Math.PI / 180)
+	return a * (180/Math.PI)
 }
 
 Math.rad = function(a){
-	return a / (Math.PI / 180)
+	return a * (Math.PI / 180)
 }
 
-Math.angle = function(x1, y1, x2, y2){
-    return Math.rad(Math.deg(Math.atan2(y2-y1, x2-x1))%360)
+Math.angle = function(a, b, rad){
+	var d = Math.atan2(b.y-a.y, b.x-a.x) * 180 / Math.PI
+	if(rad){
+		return  Math.rad(d)
+	}
+	return  d
 }
 
 Math.isOdd = function(x) {  return ( x & 1 ) ? true : false;}
