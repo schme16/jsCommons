@@ -15,15 +15,20 @@ Common functions that I've needed over the years.
 * _Converts from radians to degrees _
 * __EXAMPLE:__ ```Math.deg(10)```
 * __OUTPUT:__ ```572.957795```
+
 ###Math.deg(a)
 * _Converts from radians to degrees _
 * __EXAMPLE:__ ```Math.rad(572.957795)```
 * __OUTPUT:__ ```10```
-* 
-###Math.angle(x1, y1, x2, y2)
-* _Returns the angle from x1,y1 to x2,y2_
-* __EXAMPLE:__ ```Math.deg(10)```
-* __OUTPUT:__ ```572.957795```
+
+###Math.angle(a, b, rad)
+* _Returns the angle from Coordinate a to b_
+* _a and b are expected to be arrays of JSON objects as such "a = {x:10, y: 100}"_
+* _Defaults to degrees, unless rad is truthy (non-null)_
+* __EXAMPLE:__ ```Math.angle({x:0,y:0}, {x:100, y:100})```
+* __OUTPUT:__ ```45```
+* __EXAMPLE 2:__ ```Math.angle({x:0,y:0}, {x:100, y:100},true)```
+* __OUTPUT 2:__ ```0.785398163....```
 <br>
 <br>
 <br>
