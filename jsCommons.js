@@ -38,7 +38,7 @@ Math.biggest = function getBiggest(a,b){ if(a>=b){return a} return b };
 
 Math.circleOverlap = function(c1, c2){ //Takes an array or json obj with an x, y, radius property
 	var distance = Math.sqrt( Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2) )
-	if(distance < (c1.radius+ c2.radius)){ 
+	if(distance < (c1.radius+ c2.radius)){
 		return true;
     }
 
@@ -76,7 +76,7 @@ Math.getPixel = function (n,tileSize){ return (Math.ceil(n)*tileSize) };
 draw = {};
 
 draw.circle = function (ctx, x, y, radius, custom){
-	//draws a circle || Example Usage: 
+	//draws a circle || Example Usage:
 	var defaults = {
 			fillType: 'fill',
 			fillColor:  '#ffffff',
@@ -91,11 +91,11 @@ draw.circle = function (ctx, x, y, radius, custom){
 		ctx.fillStyle = custom.fillColor || defaults.fillColor;
 		ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
 		ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
-			
-		ctx.arc(x, y, radius, 0, Math.PI*2, true); 
+
+		ctx.arc(x, y, radius, 0, Math.PI*2, true);
 	ctx.closePath();
 
-	
+
 	if(ctx[fillType]){
 		ctx[fillType](); //Valid is stroke and fill
 	}
@@ -106,7 +106,7 @@ draw.circle = function (ctx, x, y, radius, custom){
 	else{
 		ctx.fill();
 	};
-	
+
 };
 
 draw.line = function (ctx, x, y, x2, y2, custom){
@@ -120,14 +120,14 @@ draw.line = function (ctx, x, y, x2, y2, custom){
 	};
 	ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
 	ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
-	
+
 	//ctx.beginPath();
-	ctx.moveTo(x, y);	
+	ctx.moveTo(x, y);
 	ctx.lineTo(x2, y2);
 	ctx.stroke();
 	//ctx.closePath();
 
-	
+
 };
 
 draw.clear = function(ctx){
@@ -193,9 +193,9 @@ system.iOS = function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i) 
 
 system.windows = function() { return navigator.userAgent.match(/IEMobile/i) ? true : false; };
 
-system.mobile = function() { return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows()); };
+system.mobile = function() { return (system.android() || system.blackBerry() || system.iOS() || system.windows()); };
 
-system.clickType = function(){ return system.mobile() ? 'touchstart':'click' };
+system.clickType = function(){ return system.mobile() ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'click')};
 
 
 
@@ -213,7 +213,6 @@ dom.dataAttr = function(domElement, selector, data){
 	var d = data||domElement.getAttribute("data-"+selector);
 	return d;
 };
-
 
 
 
