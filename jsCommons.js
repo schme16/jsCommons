@@ -1,4 +1,4 @@
-
+var console
 
 
 
@@ -56,7 +56,7 @@ Math.getPercentage = function (a,b){ return (a/b)*100 };
 
 Math.pointInPoly = function (poly, pt){
 	//Takes an array, NOT a JSON object
-    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i);
+    for(var c = false, i = -1, l = poly.length, j = l - 1; ++i < l; j = i)
         ((poly[i].y <= pt.y && pt.y < poly[j].y) || (poly[j].y <= pt.y && pt.y < poly[i].y))
         && (pt.x < (poly[j].x - poly[i].x) * (pt.y - poly[i].y) / (poly[j].y - poly[i].y) + poly[i].x)
         && (c = !c);
@@ -81,7 +81,7 @@ draw.circle = function (ctx, x, y, radius, custom){
 			fillType: 'fill',
 			fillColor:  '#ffffff',
 			strokeColor: '#000000',
-			strokeWidth: 1.01,
+			strokeWidth: 1.01
 		};
 	if(!custom){
 			custom = defaults;
@@ -113,7 +113,7 @@ draw.line = function (ctx, x, y, x2, y2, custom){
 	//draw a line
 	var defaults = {
 		strokeColor: '#000000',
-		strokeWidth: 1.01,
+		strokeWidth: 1.01
 	};
 	if(!custom){
 		custom = defaults;
@@ -134,7 +134,14 @@ draw.clear = function(ctx){
 	ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 };
 
-
+draw.text = function(ctx, str, x,y, custom){
+	if(!custom){
+		custom = {}
+	}
+	ctx.font = custom.font || ctx.font || "10px arial";
+	ctx.fillStyle = custom.fillStyle || "#ffffff";
+	ctx.fillText(str, x, y);
+}
 
 
 
@@ -183,22 +190,27 @@ css.getAttr = function(selector, attribute){
 
 
 /*System Functions*/
-system = {};
+sys = {s:navigator.userAgent};
 
-system.android = function() { return navigator.userAgent.match(/Android/i) ? true : false; };
+sys.android = (function() { return sys.s.match(/Android/i) ? true : false; })();
 
-system.blackBerry = function() { return navigator.userAgent.match(/BlackBerry/i) ? true : false; };
+sys.blackBerry = (function() { return sys.s.match(/BlackBerry/i) || sys.s.match(/BB/i) ? true : false; })();
 
-system.iOS = function() { return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false; };
+sys.iOS = (function() { return sys.s.match(/iPhone|iPad|iPod/i) ? true : false; })();
 
-system.windows = function() { return navigator.userAgent.match(/IEMobile/i) ? true : false; };
+sys.windowsMobile = (function() { return sys.s.match(/IEMobile/i) ? true : false; })();
 
-system.mobile = function() { return (system.android() || system.blackBerry() || system.iOS() || system.windows()); };
+sys.meego = (function() { return sys.s.match(/MeeGo/i) ? true : false; })();
 
-system.clickType = function(){ return system.mobile() ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'click')};
+sys.webOS = (function() { return sys.s.match(/webOS/i) ? true : false; })();
 
+sys.genericMobile = (function() { return sys.s.match(/mobile/i) ? true : false; })();
 
+sys.genericTablet = (function() { return sys.s.match(/tablet/i) ? true : false; })();
 
+sys.mobile = (function() { return (sys.android || sys.blackBerry || sys.iOS || sys.windowsMobile || sys.meego ||  sys.genericMobile ||  sys.genericTablet || false ) })();
+
+sys.clickType = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerUp':'click'))})();
 
 
 
@@ -217,9 +229,30 @@ dom.dataAttr = function(domElement, selector, data){
 
 
 
+/*Uber storage hack*/
+function storage(key, data){
+	var masterDB = window.localStorage;
+	if(data){
+		masterDB[key] = JSON.stringify(data)
+		return data;
+	}
+	else if(data === false){
+		masterDB.removeItem(key)
+		return false;
+	}
+	
+	if(masterDB[key]) try{return JSON.parse(masterDB[key]);}catch(e){ return false}
+	return false
+}
 
 
 
+
+/*Time Functions*/
+function getEpoch(){
+	var d = new Date();
+	return ((d.getTime()-d.getMilliseconds())/1000);
+}
 
 
 
