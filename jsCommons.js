@@ -79,8 +79,8 @@ draw.circle = function (ctx, x, y, radius, custom){
 	//draws a circle || Example Usage:
 	var defaults = {
 			fillType: 'fill',
-			fillColor:  '#ffffff',
-			strokeColor: '#000000',
+			fillColor:  '#fff',
+			strokeColor: '#000',
 			strokeWidth: 1.01
 		};
 	if(!custom){
@@ -210,7 +210,11 @@ sys.genericTablet = (function() { return sys.s.match(/tablet/i) ? true : false; 
 
 sys.mobile = (function() { return (sys.android || sys.blackBerry || sys.iOS || sys.windowsMobile || sys.meego ||  sys.genericMobile ||  sys.genericTablet || false ) })();
 
-sys.clickType = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerUp':'click'))})();
+sys.clickType = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'click'))})();
+
+sys.hoverOver = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'mouseover'))})();
+
+sys.hoverOut = (function(){ return ((sys.iOS || sys.android) ? 'touchend':( window.navigator.msPointerEnabled ? 'MSPointerUp':'mouseout'))})();
 
 
 
@@ -240,10 +244,54 @@ function storage(key, data){
 		masterDB.removeItem(key)
 		return false;
 	}
-	
+
 	if(masterDB[key]) try{return JSON.parse(masterDB[key]);}catch(e){ return false}
 	return false
 }
+
+
+
+
+/*Uber cookie hack*/
+function cookie(name, value, days, path){
+	name = encodeURIComponent(name);
+	if(value){
+		value = encodeURIComponent(value);
+			 var date = new Date();
+			 date.setTime(date.getTime() + ((days||1) * 24 * 60 * 60 * 1000));
+			 var expires = "; expires=" + date.toUTCString();
+		 document.cookie = name + "=" + value + expires + "; path="+(path||'/');
+		 return value
+	}
+	else if(value == false){
+		cookie(name, 'deleted', -1)
+		return false;
+	}
+	else{
+		var a = document.cookie.replace(/\ /g,'').split(';');
+		for(var i in a){
+			var b = a[i].split('=');
+			if(b[0] == name){
+				return b[1];
+			}
+		}
+	}
+	return false;
+}
+
+
+
+
+/*Querystring to JSON*/
+function querystring(d){
+	var r = {};
+	var a = d.split('&');
+	for(var i in a){
+		var v = a[i].split('=');
+		r[v[0]] = v[1];
+	}
+	return r;
+};
 
 
 
@@ -253,14 +301,6 @@ function getEpoch(){
 	var d = new Date();
 	return ((d.getTime()-d.getMilliseconds())/1000);
 }
-
-
-
-
-
-
-
-
 
 
 
