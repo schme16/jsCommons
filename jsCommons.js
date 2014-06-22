@@ -1,3 +1,5 @@
+'use strict';
+
 var console
 
 
@@ -5,8 +7,9 @@ var console
 
 
 /*New Math functions*/
-Math.randomTo = function(from,to){
-    return Math.floor(Math.random()*(to-from+1)+from);
+Math.randomTo = function (from, to) {
+	use 'strict';
+    return Math.floor(Math.random() * (to - from + 1) + from);
 };
 
 Math.deg = function(a){
