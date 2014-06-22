@@ -1,6 +1,8 @@
 jsCommons<img src="http://creativecommons.org/wp-content/themes/creativecommons.org/images/fc_approved_tiny.png" />
 =========
 
+[![wercker status](https://app.wercker.com/status/b3c5d21f164708cd3d10305c14bf02ec/m "wercker status")](https://app.wercker.com/project/bykey/b3c5d21f164708cd3d10305c14bf02ec)
+
 Common functions that I've needed over the years.
 
 <br>
