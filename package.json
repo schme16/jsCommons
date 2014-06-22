@@ -1,0 +1,28 @@
+{
+  "name": "jsCommons",
+  "version": "0.1.0",
+  "description": "A javascript helper library with a zero requisite and standards complience focus",
+  "main": "jsCommons.js",
+  "devDependencies": { 
+	"node-localstorage": "*",
+	"uglify-js": "*",
+	"basic-assert": "*"
+  },
+  "scripts": {
+    "test": "node tests.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/schme16/jsCommons.git"
+  },
+  "keywords": [
+    "javascript",
+    "helper"
+  ],
+  "author": "Shane Gadsby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schme16/jsCommons/issues"
+  },
+  "homepage": "https://github.com/schme16/jsCommons"
+}
