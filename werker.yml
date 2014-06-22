@@ -1,1 +1,1 @@
-box: wercker/default
+box: wercker/ubuntu12.04-nodejs0.10@1.2.0
