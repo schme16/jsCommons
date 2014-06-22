@@ -2,112 +2,106 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-(function (w) {
+(function (w, m, d) {
 	'use strict';
 
 	/*jslint maxlen:250*/
 	/*global document, window, localStorage, navigator*/
 	/*jslint nomen: true*/
 
+
 	/*New Math functions*/
-	Math.randomTo = function (from, to) {
-		return Math.floor(Math.random() * (to - from + 1) + from);
+	m.randomTo = function (from, to) {
+		return m.floor(m.random() * (to - from + 1) + from);
 	};
 
-	Math.deg = function (a) {
-		return a * (180 / Math.PI);
+	m.deg = function (a) {
+		//Radians to degrees
+		return a * (180 / m.PI);
 	};
 
-	Math.rad = function (a) {
-		return a * (Math.PI / 180);
+	m.rad = function (a) {
+		//Degrees to radians
+		return a * (m.PI / 180);
 	};
 
-	Math.angle = function (a, b, rad) {
-		var d = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+	m.angle = function (a, b, rad) {
+		//Gets angle from a to be, in either degrees (default) or radians if specified.
+		var d = m.atan2(b.y - a.y, b.x - a.x) * 180 / m.PI;
 		if (rad) {
-			return Math.rad(d);
+			return m.rad(d);
 		}
 		return d;
 	};
 
-	Math.isOdd = function (x) { return (x % 2 === 0) ? true : false; };
-
-	Math.coordDist = function (a, b) {
-		//a & b should be arrays or JSON objs eg a = {x:20, y:20}...
-		var t = Math.pow(a.x - b.x, 2) + Math.pow(a.y - b.y, 2);
-		return Math.floor(Math.sqrt(t));
+	m.odd = function (x) {
+		return (x % 2 === 0) ? false : true;
 	};
 
-	Math.diff = function (a, b) { return Math.abs(a - b); };
+	m.coordDist = function (a, b) {
+		//a & b should be arrays or JSON objs eg a = {x:20, y:20}...
+		var t = m.pow(a.x - b.x, 2) + m.pow(a.y - b.y, 2);
+		return m.floor(m.sqrt(t));
+	};
 
-	Math.biggest = function getBiggest(a, b) {
+	m.diff = function (a, b) {
+		return m.abs(a - b);
+	};
+
+	m.biggest = function (a, b) {
 		if (a >= b) {
 			return a;
 		}
 		return b;
 	};
 
-	Math.circleOverlap = function (c1, c2) {
+	m.circleOverlap = function (c1, c2) {
 		//Takes an array or json obj with an x, y, radius property
-		var a = Math.pow(c1.x - c2.x, 2) + Math.pow(c1.y - c2.y, 2),
-			distance = Math.sqrt(a);
-		if (distance < (c1.radius + c2.radius)) {
-			return true;
-		}
-
-		return false;
+		return (m.coordDist(c1, c2) < (c1.radius + c2.radius));
 	};
 
-	Math.newScale = function (img, max) {
-		//Expects an array or JSON obj in the following
-		//format: {width: x, height: x}
-
-		var x = (100 / img.width) / (100 / max.width),
-			y = (100 / img.height) / (100 / max.height);
-		return {x: x, y: y};
+	m.scale = function (img, max) {
+		//Expects object in the following format: {width: x, height: x}
+		//Does not respect aspect ratio currently...
+		return {width: (100 / img.width) / (100 / max.width), height: (100 / img.height) / (100 / max.height)};
 	};
 
-	Math.getPercentage = function (a, b) {
+	m.percent = function (a, b) {
 		return (a / b) * 100;
 	};
 
-	Math.pointInPoly = function (vs, point) {
-		//ray-casting algorithm based on
-		//http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-
-		var x = point[0],
-			y = point[1],
-			inside = false,
-			intersect,
-			j,
+	m.pointInPoly = function (vs, point) {
+        // ray-casting algorithm based on
+        // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+        var xi,
+			xj,
 			i,
+			intersect,
+            x = point[0],
+            y = point[1],
+			j,
 			yi,
-			xi,
 			yj,
-			xj;
-
-		for (i = 0, j = vs.length - 1; i < vs.length; j = (i = i + 1)) {
+            inside = false;
+        for (i = 0, j = vs.length - 1; i < vs.length; j = i++) {
 			xi = vs[i][0];
 			yi = vs[i][1];
 			xj = vs[j][0];
 			yj = vs[j][1];
-
-			intersect = ((yi > y) !== (yj > y))
-				&& (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+			intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
 			if (intersect) {
 				inside = !inside;
 			}
 		}
-
 		return inside;
 	};
 
-	Math.getTile = function (n, tileSize) {
-		return (Math.ceil((n / tileSize)));
+	m.asTile = function (n, tileSize) {
+		return (m.ceil((n / tileSize)));
 	};
 
-	Math.getPixel = function (n, tileSize) {
-		return (Math.ceil(n) * tileSize);
+	m.asPixels = function (n, tileSize) {
+		return (m.ceil(n) * tileSize);
 	};
 
 
@@ -116,35 +110,30 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 	/*Drawing Functions*/
-	w.draw = {};
+	d.def = {
+		fillType: 'fill',
+		fillColor:  '#fff',
+		strokeColor: '#000',
+		strokeWidth: 1.01
+	};
 
-	w.draw.circle = function (ctx, x, y, radius, custom) {
-		//draws a circle || Example Usage:
-		var defaults = {
-			fillType: 'fill',
-			fillColor:  '#fff',
-			strokeColor: '#000',
-			strokeWidth: 1.01
-		},
-			fillType;
+	d.circle = function (ctx, x, y, radius, cus) {
+		cus = cus || d.def;
+		var ft;
 
-		if (!custom) {
-			custom = defaults;
-		}
 
 		ctx.beginPath();
-		fillType = custom.fillType || defaults.fillType;
-		ctx.fillStyle = custom.fillColor || defaults.fillColor;
-		ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
-		ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
-
-		ctx.arc(x, y, radius, 0, Math.PI * 2, true);
+		ft = cus.fillType || d.def.fillType;
+		ctx.fillStyle = cus.fillColor || d.def.fillColor;
+		ctx.strokeStyle = cus.strokeColor || d.def.strokeColor;
+		ctx.lineWidth = cus.strokeWidth || d.def.strokeWidth;
+		ctx.arc(x, y, radius, 0, m.PI * 2, true);
 		ctx.closePath();
 
 
-		if (ctx[fillType]) {
-			ctx[fillType](); //Valid is stroke and fill
-		} else if (fillType === 'both') {
+		if (ctx[ft]) {
+			ctx[ft](); //Valid is stroke and fill
+		} else if (ft === 'both') {
 			ctx.fill();
 			ctx.stroke();
 		} else {
@@ -153,20 +142,13 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 	};
 
-	w.draw.line = function (ctx, x, y, x2, y2, custom) {
-		//draw a line
-		var defaults = {
-			strokeColor: '#000000',
-			strokeWidth: 1.01
-		};
-
-		if (!custom) {
-			custom = defaults;
-		}
+	d.line = function (ctx, x, y, x2, y2, cus) {
+		//draws a line
+		cus = cus || d.def;
 
 		ctx.beginPath();
-		ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
-		ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
+		ctx.lineWidth = cus.strokeWidth || d.def.strokeWidth;
+		ctx.strokeStyle = cus.strokeColor || d.def.strokeColor;
 		ctx.moveTo(x, y);
 		ctx.lineTo(x2, y2);
 		ctx.stroke();
@@ -175,30 +157,22 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 	};
 
-	w.draw.rect = function (ctx, x, y, w, h, custom) {
+	d.rect = function (ctx, x, y, w, h, cus) {
 		//draw a line
-		var defaults = {
-			fill: true,
-			stroke: false,
-			strokeColor: '#000000',
-			fillColor: '#ff0000',
-			lineWidth: 2.01
-		};
-
-		custom = (custom || defaults);
+		cus = (cus || d.def);
 
 		ctx.beginPath();
 
 		ctx.rect(x, y, w, h);
-		ctx.lineWidth = custom.lineWidth || defaults.lineWidth;
-		ctx.strokeStyle = custom.strokeStyle || defaults.strokeStyle;
-		ctx.fillStyle = custom.fillStyle || defaults.fillStyle;
+		ctx.lineWidth = cus.lineWidth || d.def.lineWidth;
+		ctx.strokeStyle = cus.strokeStyle || d.def.strokeStyle;
+		ctx.fillStyle = cus.fillStyle || d.def.fillStyle;
 
-		if (custom.fillStyle || defaults.fillStyle) {
+		if (cus.fillStyle || d.def.fillStyle) {
 			ctx.fill();
 		}
 
-		if (custom.stroke || defaults.stroke) {
+		if (cus.stroke || d.def.stroke) {
 			ctx.stroke();
 		}
 
@@ -207,15 +181,15 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 	};
 
-	w.draw.clear = function (ctx) {
+	d.clear = function (ctx) {
 		ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 	};
 
-	w.draw.text = function (ctx, str, x, y, custom) {
-		custom = custom || {};
+	d.text = function (ctx, str, x, y, cus) {
+		cus = cus || d.def;
 		ctx.beginPath();
-		ctx.font = custom.font || ctx.font || "10px arial";
-		ctx.fillStyle = custom.fillStyle || "#ffffff";
+		ctx.font = cus.font || ctx.font || "10px arial";
+		ctx.fillStyle = cus.fillStyle || "#ffffff";
 		ctx.fillText(str, x, y);
 		ctx.closePath();
 	};
@@ -326,53 +300,53 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 	/*Uber cookie hack*/
 	w.cookie = (function () {
-		var Cookies = function (key, value, options) {
-			return arguments.length === 1 ?	Cookies.get(key) : Cookies.set(key, value, options);
+		var C = function (key, value, options) {
+			return arguments.length === 1 ?	C.get(key) : C.set(key, value, options);
 		};
 
 		// Allows for setter injection in unit tests
-		Cookies._document = document;
-		Cookies._navigator = navigator;
+		C._d = document;
+		C._n = navigator;
 
-		Cookies.defaults = {
+		C.defaults = {
 			path: '/'
 		};
 
-		Cookies.get = function (key) {
-			if (Cookies._cachedDocumentCookie !== Cookies._document.cookie) {
-				Cookies._renewCache();
+		C.get = function (key) {
+			if (C._cachedDocumentCookie !== C._d.cookie) {
+				C._renewCache();
 			}
 
-			return Cookies._cache[key];
+			return C._cache[key];
 		};
 
-		Cookies.set = function (key, value, options) {
-			options = Cookies._getExtendedOptions(options);
-			options.expires = Cookies._getExpiresDate(value === undefined ? -1 : options.expires);
+		C.set = function (key, value, options) {
+			options = C._getExtendedOptions(options);
+			options.expires = C._getExpiresDate(value === undefined ? -1 : options.expires);
 
-			Cookies._document.cookie = Cookies._generateCookieString(key, value, options);
+			C._d.cookie = C._generateCookieString(key, value, options);
 
-			return Cookies;
+			return C;
 		};
 
-		Cookies.expire = function (key, options) {
-			return Cookies.set(key, undefined, options);
+		C.expire = function (key, options) {
+			return C.set(key, undefined, options);
 		};
 
-		Cookies._getExtendedOptions = function (options) {
+		C._getExtendedOptions = function (options) {
 			return {
-				path: (options && options.path) || Cookies.defaults.path,
-				domain: (options && options.domain) || Cookies.defaults.domain,
-				expires: (options && options.expires) || Cookies.defaults.expires,
-				secure: (options && options.secure !== undefined) ?  options.secure : Cookies.defaults.secure
+				path: (options && options.path) || C.defaults.path,
+				domain: (options && options.domain) || C.defaults.domain,
+				expires: (options && options.expires) || C.defaults.expires,
+				secure: (options && options.secure !== undefined) ?  options.secure : C.defaults.secure
 			};
 		};
 
-		Cookies._isValidDate = function (date) {
+		C._isValidDate = function (date) {
 			return Object.prototype.toString.call(date) === '[object Date]' && !isNaN(date.getTime());
 		};
 
-		Cookies._getExpiresDate = function (expires, now) {
+		C._getExpiresDate = function (expires, now) {
 			now = now || new Date();
 			switch (typeof expires) {
 			case 'number':
@@ -383,14 +357,14 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 				break;
 			}
 
-			if (expires && !Cookies._isValidDate(expires)) {
+			if (expires && !C._isValidDate(expires)) {
 				throw new Error('`expires` parameter cannot be converted to a valid Date instance');
 			}
 
 			return expires;
 		};
 
-		Cookies._generateCookieString = function (key, value, options) {
+		C._generateCookieString = function (key, value, options) {
 			key = key.replace(/[^#$&+\^`|]/g, encodeURIComponent);
 			key = key.replace(/\(/g, '%28').replace(/\)/g, '%29');
 			value = (value + String('')).replace(/[^!#$&-+\--:<-\[\]-~]/g, encodeURIComponent);
@@ -405,13 +379,13 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 			return cookieString;
 		};
 
-		Cookies._getCookieObjectFromString = function (documentCookie) {
+		C._getCookieObjectFromString = function (documentCookie) {
 			var cookieObject = {},
 				cookiesArray = documentCookie ? documentCookie.split('; ') : [],
 				cookieKvp,
 				i;
 			for (i = 0; i < cookiesArray.length; i++) {
-				cookieKvp = Cookies._getKeyValuePairFromCookieString(cookiesArray[i]);
+				cookieKvp = C._getKeyValuePairFromCookieString(cookiesArray[i]);
 
 				if (cookieObject[cookieKvp.key] === undefined) {
 					cookieObject[cookieKvp.key] = cookieKvp.value;
@@ -421,7 +395,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 			return cookieObject;
 		};
 
-		Cookies._getKeyValuePairFromCookieString = function (cookieString) {
+		C._getKeyValuePairFromCookieString = function (cookieString) {
 			// "=" is a valid character in a cookie value according to RFC6265, so cannot `split('=')`
 			var separatorIndex = cookieString.indexOf('=');
 
@@ -434,20 +408,20 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 			};
 		};
 
-		Cookies._renewCache = function () {
-			Cookies._cache = Cookies._getCookieObjectFromString(Cookies._document.cookie);
-			Cookies._cachedDocumentCookie = Cookies._document.cookie;
+		C._renewCache = function () {
+			C._cache = C._getCookieObjectFromString(C._d.cookie);
+			C._cachedDocumentCookie = C._d.cookie;
 		};
 
-		Cookies._areEnabled = function () {
+		C._areEnabled = function () {
 			var testKey = 'cookies.js',
-				areEnabled = Cookies.set(testKey, 1).get(testKey) === '1';
-			Cookies.expire(testKey);
+				areEnabled = C.set(testKey, 1).get(testKey) === '1';
+			C.expire(testKey);
 			return areEnabled;
 		};
 
-		Cookies.enabled = Cookies._areEnabled();
-		return Cookies;
+		C.enabled = C._areEnabled();
+		return C;
 	}());
 
 
@@ -484,6 +458,6 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 		module.exports = w;
 	}
 	return w;
-}(window));
+}(window, Math, (window.draw = {})));
 
 
