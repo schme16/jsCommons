@@ -118,14 +118,45 @@ draw.line = function (ctx, x, y, x2, y2, custom){
 	if(!custom){
 		custom = defaults;
 	};
-	ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
-	ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
 
-	//ctx.beginPath();
-	ctx.moveTo(x, y);
-	ctx.lineTo(x2, y2);
-	ctx.stroke();
-	//ctx.closePath();
+	ctx.beginPath();
+		ctx.lineWidth = custom.strokeWidth || defaults.strokeWidth;
+		ctx.strokeStyle = custom.strokeColor || defaults.strokeColor;
+		ctx.moveTo(x, y);
+		ctx.lineTo(x2, y2);
+		ctx.stroke();
+	ctx.closePath();
+
+
+};
+
+draw.rect = function (ctx, x, y, w, h, custom){
+	//draw a line
+	var defaults = {
+		fill: true,
+		stroke: false,
+		strokeColor: '#000000',
+		fillColor: '#ff0000',
+		lineWidth: 2.01
+	};
+	custom = (custom||defaults);
+
+	ctx.beginPath();
+
+		ctx.rect(x, y, w, h);
+		ctx.lineWidth = custom.lineWidth || defaults.lineWidth;
+		ctx.strokeStyle = custom.strokeStyle || defaults.strokeStyle;
+		ctx.fillStyle = custom.fillStyle || defaults.fillStyle;
+
+		if (custom.fillStyle||defaults.fillStyle) {
+			ctx.fill();
+		}
+
+		if (custom.stroke||defaults.stroke) {
+			ctx.stroke();
+		}
+
+	ctx.closePath();
 
 
 };
@@ -138,9 +169,11 @@ draw.text = function(ctx, str, x,y, custom){
 	if(!custom){
 		custom = {}
 	}
+	ctx.beginPath();
 	ctx.font = custom.font || ctx.font || "10px arial";
 	ctx.fillStyle = custom.fillStyle || "#ffffff";
 	ctx.fillText(str, x, y);
+	ctx.closePath();
 }
 
 
@@ -189,36 +222,6 @@ css.getAttr = function(selector, attribute){
 
 
 
-/*System Functions*/
-sys = {s:navigator.userAgent};
-
-sys.android = (function() { return sys.s.match(/Android/i) ? true : false; })();
-
-sys.blackBerry = (function() { return sys.s.match(/BlackBerry/i) || sys.s.match(/BB/i) ? true : false; })();
-
-sys.iOS = (function() { return sys.s.match(/iPhone|iPad|iPod/i) ? true : false; })();
-
-sys.windowsMobile = (function() { return sys.s.match(/IEMobile/i) ? true : false; })();
-
-sys.meego = (function() { return sys.s.match(/MeeGo/i) ? true : false; })();
-
-sys.webOS = (function() { return sys.s.match(/webOS/i) ? true : false; })();
-
-sys.genericMobile = (function() { return sys.s.match(/mobile/i) ? true : false; })();
-
-sys.genericTablet = (function() { return sys.s.match(/tablet/i) ? true : false; })();
-
-sys.mobile = (function() { return (sys.android || sys.blackBerry || sys.iOS || sys.windowsMobile || sys.meego ||  sys.genericMobile ||  sys.genericTablet || false ) })();
-
-sys.clickType = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'click'))})();
-
-sys.hoverOver = (function(){ return ((sys.iOS || sys.android) ? 'touchstart':( window.navigator.msPointerEnabled ? 'MSPointerDown':'mouseover'))})();
-
-sys.hoverOut = (function(){ return ((sys.iOS || sys.android) ? 'touchend':( window.navigator.msPointerEnabled ? 'MSPointerUp':'mouseout'))})();
-
-
-
-
 /*DOM Functions*/
 dom = {};
 
@@ -229,6 +232,8 @@ dom.dataAttr = function(domElement, selector, data){
 	var d = data||domElement.getAttribute("data-"+selector);
 	return d;
 };
+
+
 
 
 
@@ -248,6 +253,8 @@ function storage(key, data){
 	if(masterDB[key]) try{return JSON.parse(masterDB[key]);}catch(e){ return false}
 	return false
 }
+
+
 
 
 
@@ -282,6 +289,8 @@ function cookie(name, value, days, path){
 
 
 
+
+
 /*Querystring to JSON*/
 function querystring(d){
 	var r = {};
@@ -292,6 +301,8 @@ function querystring(d){
 	}
 	return r;
 };
+
+
 
 
 
@@ -308,3 +319,5 @@ function getEpoch(){
 
 
 
+
+/*EOF*/
