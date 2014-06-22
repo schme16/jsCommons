@@ -19,8 +19,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
 
 
 //Tests that it is actually returning the correct time
-//assert.is(w.getEpoch(), parseInt((new Date().getTime() / 1000).toFixed(0, 0), 0))
-assert.is(w.getEpoch(), '123123123')
+assert.is(w.getEpoch(), parseInt((new Date().getTime() / 1000).toFixed(0, 0), 0))
 
 
 
