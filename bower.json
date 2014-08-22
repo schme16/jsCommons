@@ -1,0 +1,23 @@
+{
+  "name": "js-commons",
+  "main": "jsCommons.min.js",
+  "version": "0.2.1",
+  "homepage": "https://github.com/schme16/jsCommons",
+  "authors": [
+    "Shane Gadsby <schme16@gmail.com>"
+  ],
+  "description": "A set of handy javascript utils",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "werker.yml",
+    "node_modules",
+    "bower_components",
+    ".git",
+    ".gitignore",
+    "scratch",
+    "tests.js",
+    "test",
+    "tests"
+  ]
+}
