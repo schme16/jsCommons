@@ -10,7 +10,7 @@
 assert = require('basic-assert');
 require('basic-assert');
 w = require('./jsCommons.min.js');
-
+var window = window || {}, document = document || {}, navigator = navigator || {};
 //LocalStorage
 if (typeof localStorage === "undefined" || localStorage === null) {
 	var LocalStorage = require('node-localstorage').LocalStorage;

@@ -1,4 +1,4 @@
-var window = window || {}, document = document || {}, navigator = navigator || {}, module;
+var module;
 
 
 
@@ -10,106 +10,119 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 	/*jslint nomen: true*/
 
 
-	/*New Math functions*/
+/*New Math functions*/
 	m.randomTo = function (from, to) {
 		return m.floor(m.random() * (to - from + 1) + from);
 	};
 
-	m.deg = function (a) {
-		//Radians to degrees
-		return a * (180 / m.PI);
-	};
+	/*Radians to degrees*/
+		m.deg = function (a) {
+			return a * (180 / m.PI);
+		};
 
-	m.rad = function (a) {
-		//Degrees to radians
-		return a * (m.PI / 180);
-	};
+	/*Degrees to radians*/
+		m.rad = function (a) {
+			return a * (m.PI / 180);
+		};
 
-	m.angle = function (a, b, rad) {
-		//Gets angle from a to be, in either degrees (default) or radians if specified.
-		var d = m.atan2(b.y - a.y, b.x - a.x) * 180 / m.PI;
-		if (rad) {
-			return m.rad(d);
-		}
-		return d;
-	};
-
-	m.odd = function (x) {
-		return (x % 2 === 0) ? false : true;
-	};
-
-	m.coordDist = function (a, b) {
-		//a & b should be arrays or JSON objs eg a = {x:20, y:20}...
-		var t = m.pow(a.x - b.x, 2) + m.pow(a.y - b.y, 2);
-		return m.floor(m.sqrt(t));
-	};
-
-	m.diff = function (a, b) {
-		return m.abs(a - b);
-	};
-
-	m.biggest = function (a, b) {
-		if (a >= b) {
-			return a;
-		}
-		return b;
-	};
-
-	m.circleOverlap = function (c1, c2) {
-		//Takes an array or json obj with an x, y, radius property
-		return (m.coordDist(c1, c2) < (c1.radius + c2.radius));
-	};
-
-	m.scale = function (img, max) {
-		//Expects object in the following format: {width: x, height: x}
-		//Does not respect aspect ratio currently...
-		return {width: (100 / img.width) / (100 / max.width), height: (100 / img.height) / (100 / max.height)};
-	};
-
-	m.percent = function (a, b) {
-		return (a / b) * 100;
-	};
-
-	m.pointInPoly = function (vs, point) {
-        // ray-casting algorithm based on
-        // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-        var xi,
-			xj,
-			i,
-			intersect,
-            x = point[0],
-            y = point[1],
-			j,
-			yi,
-			yj,
-            inside = false;
-        for (i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-			xi = vs[i][0];
-			yi = vs[i][1];
-			xj = vs[j][0];
-			yj = vs[j][1];
-			intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-			if (intersect) {
-				inside = !inside;
+	/*Gets angle from a to be, in either degrees (default) or radians if specified.*/
+		m.angle = function (a, b, rad) {
+			var d = m.atan2(b.y - a.y, b.x - a.x) * 180 / m.PI;
+			if (rad) {
+				return m.rad(d);
 			}
-		}
-		return inside;
-	};
+			return d;
+		};
 
-	m.asTile = function (n, tileSize) {
-		return (m.ceil((n / tileSize)));
-	};
+	/*Is this number odd?*/
+		m.odd = function (x) {
+			return (x % 2 === 0) ? false : true;
+		};
 
-	m.asPixels = function (n, tileSize) {
-		return (m.ceil(n) * tileSize);
-	};
+	/*Is this number even?*/
+		m.even = function (x) {
+			return !m.odd(x);
+		};
+
+	/*Get distance between two x/y co-ords*/
+		m.coordDist = function (a, b) {
+			var t = m.pow(a.x - b.x, 2) + m.pow(a.y - b.y, 2);
+			return m.floor(m.sqrt(t));
+		};
+
+		m.diff = function (a, b) {
+			return m.abs(a - b);
+		};
+
+	/*Returns the biggest of the two numbers*/
+		m.biggest = function (a, b) {
+			if (a >= b) {
+				return a;
+			}
+			return b;
+		};
+
+	/*Do two circles overlap?*/
+		m.circleOverlap = function (c1, c2) {
+			//Takes an array or json obj with an x, y, radius property
+			return (m.coordDist(c1, c2) < (c1.radius + c2.radius));
+		};
+
+	/*returns a scale based on the input values*/
+		m.scale = function (img, max) {
+			//Expects object in the following format: {width: x, height: x}
+			//Does not respect aspect ratio currently...
+			return {width: (100 / img.width) / (100 / max.width), height: (100 / img.height) / (100 / max.height)};
+		};
+
+	/*Percentage of one number to the other*/
+		m.percent = function (a, b) {
+			return (a / b) * 100;
+		};
+
+	/*Is a co-ord in a polygon?*/
+		m.pointInPoly = function (vs, point) {
+	        // ray-casting algorithm based on
+	        // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+	        var xi,
+				xj,
+				i,
+				intersect,
+	            x = point[0],
+	            y = point[1],
+				j,
+				yi,
+				yj,
+	            inside = false;
+	        for (i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+				xi = vs[i][0];
+				yi = vs[i][1];
+				xj = vs[j][0];
+				yj = vs[j][1];
+				intersect = ((yi > y) !== (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+				if (intersect) {
+					inside = !inside;
+				}
+			}
+			return inside;
+		};
+
+	/*Returns a "tile" number based on a pixel value*/
+		m.asTile = function (n, tileSize) {
+			return (m.ceil((n / tileSize)));
+		};
+
+	/*Returns a pixel number based on a "tile" value*/
+		m.asPixels = function (n, tileSize) {
+			return (m.ceil(n) * tileSize);
+		};
 
 
 
 
 
 
-	/*Drawing Functions*/
+/*Drawing Functions*/
 	d.def = {
 		fillType: 'fill',
 		fillColor:  '#fff',
@@ -199,7 +212,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*Array Functions*/
+/*Array Functions*/
 	w.array = {};
 
 	w.array.getJSONLength = function (json) {
@@ -216,7 +229,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*CSS Functions*/
+/*CSS Functions*/
 	w.css = {};
 	w.css.getAttr = function (selector, attribute) {
 		/*
@@ -255,7 +268,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*DOM Functions*/
+/*DOM Functions*/
 	w.dom = {};
 
 	w.dom.dataAttr = function (domElement, selector, data) {
@@ -271,7 +284,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*Uber storage hack*/
+/*Uber storage hack*/
 	w.storage = function (key, data) {
 		var masterDB = localStorage,
 			ret;
@@ -298,7 +311,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*Uber cookie hack*/
+/*Uber cookie hack*/
 	w.cookie = (function () {
 		var C = function (key, value, options) {
 			return arguments.length === 1 ?	C.get(key) : C.set(key, value, options);
@@ -429,7 +442,7 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*Querystring to JSON*/
+/*Querystring to JSON*/
 	w.querystring = function (d) {
 		var r = {},
 			a = d.split('&'),
@@ -449,15 +462,49 @@ var window = window || {}, document = document || {}, navigator = navigator || {
 
 
 
-	/*Time Functions*/
+
+/*XHR Functions*/
+request = new XMLHttpRequest();
+request.open('GET', '/my/url', true);
+
+request.onreadystatechange = function() {
+  if (this.readyState === 4){
+    if (this.status >= 200 && this.status < 400){
+      // Success!
+      resp = this.responseText;
+    } else {
+      // Error :(
+    }
+  }
+};
+
+request.send();
+request = null;
+
+
+
+
+
+
+/*Time Functions*/
 	w.getEpoch = function () {
 		return parseInt((new Date().getTime() / 1000).toFixed(0, 0), 0);
 	};
 
+
+
+
+
+/*AMD/node exports*/
 	if (module) {
 		module.exports = w;
 	}
 	return w;
+
+
+
+
+
 }(window, Math, (window.draw = {})));
 
 
